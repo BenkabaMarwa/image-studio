@@ -4,6 +4,8 @@ A modern, browser-based **image enhancement and background removal tool** built 
 
 Devex Image Studio allows users to upload an image, enhance its appearance, adjust colors and sharpness, remove backgrounds by sampling a color, and download the edited result as a PNG file.
 
+![Devex Image Studio](screenshots/preview.jpg)
+
 ## ✨ Features
 
 ### 📤 Image Upload
@@ -226,15 +228,11 @@ The project does not implement a backend image-upload service.
 
 ## 📸 Screenshots
 
-Add screenshots of the application here:
-
-```markdown
 ![Devex Image Studio](screenshots/image-studio.jpg)
 
 ![Image Editing](screenshots/editing.png)
 
 ![Background Removal](screenshots/background-removal.png)
-```
 
 ## 👨‍💻 Developer
 
