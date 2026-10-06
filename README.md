@@ -99,7 +99,7 @@ No backend or external image-processing server is required.
 ## 📁 Project Structure
 
 ```text
-devex-image-studio/
+image-studio/
 │
 ├── index.html
 └── README.md
@@ -112,15 +112,14 @@ The application is implemented as a single HTML file containing the HTML structu
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/USERNAME/devex-image-studio.git
+git clone https://github.com/BenkabaMarwa/image-studio.git
 ```
 
-Replace `USERNAME` with your GitHub username.
 
 ### 2. Navigate to the project
 
 ```bash
-cd devex-image-studio
+cd image-studio
 ```
 
 ### 3. Run the application
