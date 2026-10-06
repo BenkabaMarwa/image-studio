@@ -237,8 +237,9 @@ The project does not implement a backend image-upload service.
 
 **Marwa Benkaba**
 
-- GitHub: https://github.com/BenkabaMarwa
-- LinkedIn: https://www.linkedin.com/in/marwa-benkaba-916090329/
+- GitHub: [@BenkabaMarwa](https://github.com/BenkabaMarwa)
+- LinkedIn: [marwa-benkaba](https://www.linkedin.com/in/marwa-benkaba-916090329/)
+
 
 ## 📄 License
 
