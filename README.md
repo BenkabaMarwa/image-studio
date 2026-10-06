@@ -229,7 +229,7 @@ The project does not implement a backend image-upload service.
 Add screenshots of the application here:
 
 ```markdown
-![Devex Image Studio](screenshots/image-studio.png)
+![Devex Image Studio](screenshots/image-studio.jpg)
 
 ![Image Editing](screenshots/editing.png)
 
