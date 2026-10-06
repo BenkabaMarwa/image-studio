@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devex | Image Studio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0b0f1a; --card: rgba(255,255,255,0.04); --card-border: rgba(255,255,255,0.08);
+        --accent: #2f8cff; --accent-soft: rgba(47,140,255,0.15); --pink: #ff5da2;
+        --text: #eef1f7; --muted: #8b93a7;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: radial-gradient(circle at 20% 0%, #14203a 0%, var(--bg) 45%), var(--bg);
+        color: var(--text); font-family: "Inter", sans-serif; min-height: 100vh;
+      }
+      .glow { position: fixed; width: 520px; height: 520px; border-radius: 50%; background: var(--accent); filter: blur(140px); opacity: .18; top: -180px; right: -160px; pointer-events: none; }
+      .glow.two { background: var(--pink); opacity: .1; top: auto; right: auto; bottom: -200px; left: -160px; }
+      .wrap { position: relative; max-width: 1040px; margin: 0 auto; padding: 48px 24px 40px; }
+      nav { display: flex; align-items: center; gap: 12px; margin-bottom: 44px; }
+      .mark { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), #7ab8ff); display: grid; place-items: center; font-weight: 800; font-family: "Poppins", sans-serif; color: #06111f; box-shadow: 0 8px 24px rgba(47,140,255,.35); }
+      .brand { font-family: "Poppins", sans-serif; font-weight: 700; font-size: 1.25rem; letter-spacing: -.01em; }
+      .badge { margin-left: auto; font-size: .7rem; color: var(--accent); background: var(--accent-soft); border: 1px solid rgba(47,140,255,.3); padding: 5px 12px; border-radius: 999px; font-weight: 600; }
+      .hero { margin-bottom: 36px; }
+      .hero h1 { font-family: "Poppins", sans-serif; font-weight: 800; font-size: clamp(1.9rem, 4.5vw, 2.9rem); letter-spacing: -.02em; line-height: 1.15; margin-bottom: 10px; }
+      .hero h1 span { background: linear-gradient(90deg, var(--accent), #7ab8ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .hero p { color: var(--muted); font-size: .98rem; }
+
+      .grid2 { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; }
+      @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } }
+      .card { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 26px; backdrop-filter: blur(16px); }
+      .card h3 { font-family: "Poppins", sans-serif; font-size: .85rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+
+      .dropzone {
+        border: 2px dashed var(--card-border); border-radius: 16px; padding: 28px 16px;
+        text-align: center; cursor: pointer; transition: all .2s; margin-bottom: 18px;
+      }
+      .dropzone:hover, .dropzone.drag { border-color: var(--accent); background: var(--accent-soft); }
+      .dropzone p { font-size: .82rem; color: var(--muted); }
+      .dropzone p.main { color: var(--text); font-weight: 600; margin-bottom: 4px; font-size: .9rem; }
+      #file-input { display: none; }
+
+      .field { margin-bottom: 16px; }
+      label { display: block; font-size: .78rem; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+      .slider-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+      .slider-val { font-size: .8rem; color: var(--accent); font-weight: 600; }
+      input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+      .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 18px; }
+      .preset-btn {
+        background: rgba(255,255,255,.05); border: 1px solid var(--card-border); color: var(--text);
+        font-size: .78rem; font-weight: 600; padding: 10px 6px; border-radius: 10px; cursor: pointer; transition: all .2s;
+      }
+      .preset-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+      .divider { height: 1px; background: var(--card-border); margin: 20px 0; }
+
+      .bg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+      .btn-sm {
+        background: rgba(255,255,255,.05); border: 1px solid var(--card-border); color: var(--text);
+        font-size: .78rem; font-weight: 600; padding: 11px; border-radius: 10px; cursor: pointer; transition: all .2s;
+      }
+      .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+      .btn-sm.picking { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+      .sample-chip { display: flex; align-items: center; gap: 8px; font-size: .75rem; color: var(--muted); margin-bottom: 10px; }
+      .swatch { width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--card-border); }
+
+      .btn-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 10px; }
+      .btn-generate {
+        background: linear-gradient(135deg, var(--accent), #7ab8ff); border: none; color: #06111f;
+        font-family: "Poppins", sans-serif; font-weight: 700; font-size: .9rem; padding: 14px; border-radius: 12px;
+        cursor: pointer; transition: transform .15s, box-shadow .2s;
+      }
+      .btn-generate:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(47,140,255,.35); }
+      .btn-clear {
+        background: transparent; border: 1px solid var(--card-border); color: var(--muted);
+        font-family: "Poppins", sans-serif; font-weight: 600; font-size: .85rem; padding: 14px 18px; border-radius: 12px;
+        cursor: pointer; transition: all .2s;
+      }
+      .btn-clear:hover { border-color: var(--pink); color: var(--pink); }
+
+      .output-card { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 420px; }
+      .canvas-frame {
+        width: 100%; min-height: 320px; border-radius: 16px; overflow: hidden; margin-bottom: 18px;
+        background-image: linear-gradient(45deg,#222 25%,transparent 25%),linear-gradient(-45deg,#222 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#222 75%),linear-gradient(-45deg,transparent 75%,#222 75%);
+        background-size: 20px 20px; background-position: 0 0,0 10px,10px -10px,-10px 0;
+        background-color: #111; display: flex; align-items: center; justify-content: center;
+      }
+      #placeholder { color: var(--muted); text-align: center; padding: 40px; font-size: .85rem; }
+      #img-canvas { display: none; max-width: 100%; max-height: 420px; cursor: default; }
+      #img-canvas.pick-mode { cursor: crosshair; }
+
+      .dl-row { width: 100%; opacity: 0; transform: translateY(8px); transition: all .35s; }
+      .dl-row.visible { opacity: 1; transform: translateY(0); }
+      .btn-dl {
+        width: 100%; background: rgba(255,255,255,.05); border: 1px solid var(--card-border); color: var(--text);
+        font-size: .82rem; font-weight: 600; padding: 13px; border-radius: 10px; cursor: pointer; transition: all .2s;
+      }
+      .btn-dl:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+      .status { font-size: .75rem; color: var(--accent); text-align: center; height: 16px; margin-top: 12px; opacity: 0; transition: opacity .3s; font-weight: 500; }
+      .status.show { opacity: 1; }
+
+      footer { position: relative; text-align: center; padding: 36px 20px 8px; color: var(--muted); font-size: .78rem; }
+      footer .credit { margin-bottom: 12px; }
+      footer .credit a { color: var(--accent); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--accent-soft); }
+      .social-row { display: flex; justify-content: center; gap: 14px; margin-bottom: 14px; }
+      .social-row a { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: rgba(255,255,255,.05); border: 1px solid var(--card-border); color: var(--muted); transition: all .2s; }
+      .social-row a:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+      .social-row svg { width: 18px; height: 18px; fill: currentColor; }
+      .copyright { font-size: .7rem; color: #5a6178; letter-spacing: .02em; }
+    </style>
+  </head>
+  <body>
+    <div class="glow"></div>
+    <div class="glow two"></div>
+
+    <div class="wrap">
+      <nav>
+        <div class="mark">MB</div>
+        <div class="brand">Marwa Benkaba</div>
+        <div class="badge">Image Lab</div>
+      </nav>
+
+      <div class="hero">
+        <h1>Enhance your photo,<br /><span>remove the background.</span></h1>
+        <p>Upload an image, fine-tune brightness and clarity, lighten or darken it, and lift the background, all in your browser.</p>
+      </div>
+
+      <div class="grid2">
+        <!-- LEFT: Controls -->
+        <div class="card">
+          <h3>Upload</h3>
+          <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+            <p class="main">Click or drop an image here</p>
+            <p>PNG, JPG, or WEBP</p>
+          </div>
+          <input type="file" id="file-input" accept="image/*" />
+
+          <h3>Adjustments</h3>
+          <div class="field">
+            <div class="slider-row"><label style="margin:0">Brightness</label><span class="slider-val" id="bri-val">100%</span></div>
+            <input type="range" id="brightness" min="40" max="180" value="100" oninput="updateVal('bri-val',this.value+'%');render()" />
+          </div>
+          <div class="field">
+            <div class="slider-row"><label style="margin:0">Contrast</label><span class="slider-val" id="con-val">100%</span></div>
+            <input type="range" id="contrast" min="40" max="180" value="100" oninput="updateVal('con-val',this.value+'%');render()" />
+          </div>
+          <div class="field">
+            <div class="slider-row"><label style="margin:0">Saturation</label><span class="slider-val" id="sat-val">100%</span></div>
+            <input type="range" id="saturation" min="0" max="200" value="100" oninput="updateVal('sat-val',this.value+'%');render()" />
+          </div>
+          <div class="field">
+            <div class="slider-row"><label style="margin:0">Sharpness</label><span class="slider-val" id="sharp-val">0</span></div>
+            <input type="range" id="sharpness" min="0" max="100" value="0" oninput="updateVal('sharp-val',this.value);render()" />
+          </div>
+
+          <div class="preset-grid">
+            <button class="preset-btn" onclick="applyPreset('enhance')">Auto Enhance</button>
+            <button class="preset-btn" onclick="applyPreset('bw')"> B&amp;W</button>
+            <button class="preset-btn" onclick="applyPreset('warm')">Light / Warm</button>
+            <button class="preset-btn" onclick="applyPreset('dark')">Dark / Moody</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Background</h3>
+          <div class="bg-row">
+            <button class="btn-sm" id="pick-btn" onclick="togglePick()"> Pick bg color</button>
+            <button class="btn-sm" onclick="removeBackground()"> ✂ Remove</button>
+          </div>
+          <div class="sample-chip"><span class="swatch" id="sample-swatch" style="background:#888"></span><span id="sample-label">No color sampled yet - click "Pick" then click the background</span></div>
+          <div class="field">
+            <div class="slider-row"><label style="margin:0">Tolerance</label><span class="slider-val" id="tol-val">40</span></div>
+            <input type="range" id="tolerance" min="5" max="120" value="40" oninput="updateVal('tol-val',this.value)" />
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-generate" onclick="resetAll()">Reset Image</button>
+            <button class="btn-clear" onclick="clearAll()">Clear</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: Output -->
+        <div class="card output-card">
+          <h3>Preview</h3>
+          <div class="canvas-frame">
+            <div id="placeholder">Your edited image<br />will appear here</div>
+            <canvas id="img-canvas"></canvas>
+          </div>
+          <div class="dl-row" id="dl-row">
+            <button class="btn-dl" onclick="downloadImage()">↓ Download PNG</button>
+          </div>
+          <div class="status" id="status-msg"></div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="credit">Created by <a href="https://github.com/BenkabaMarwa" target="_blank" rel="noopener">Marwa Benkaba</a></div>
+        <div class="social-row">
+          <a href="https://github.com/BenkabaMarwa" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 5.02 3.26 9.28 7.79 10.78.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.17.69-3.84-1.35-3.84-1.35-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.74.4-1.25.72-1.54-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.17a10.9 10.9 0 0 1 5.73 0c2.19-1.48 3.15-1.17 3.15-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.33-5.21 5.62.41.35.77 1.04.77 2.1 0 1.52-.01 2.74-.01 3.11 0 .3.21.66.79.55A10.53 10.53 0 0 0 23.02 11.5C23.02 5.24 18.27.5 12 .5z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/marwa-benkaba-916090329/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          </a>
+        </div>
+        <div class="copyright">© 2026 Marwa Benkaba. All rights reserved.</div>
+      </footer>
+    </div>
+
+    <script>
+      let originalImg = null;
+      let pickMode = false;
+      let sampledColor = null;
+      const canvas = document.getElementById("img-canvas");
+      const ctx = canvas.getContext("2d");
+
+      function updateVal(id, val) { document.getElementById(id).textContent = val; }
+      function showStatus(msg, color = "#2f8cff") {
+        const el = document.getElementById("status-msg");
+        el.textContent = msg; el.style.color = color; el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 2500);
+      }
+
+      // Upload handling
+      const dz = document.getElementById("dropzone");
+      const fileInput = document.getElementById("file-input");
+      fileInput.addEventListener("change", (e) => loadFile(e.target.files[0]));
+      ["dragover", "dragleave", "drop"].forEach((evt) =>
+        dz.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dz.classList.toggle("drag", evt === "dragover");
+          if (evt === "drop" && e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+        })
+      );
+
+      function loadFile(file) {
+        if (!file || !file.type.startsWith("image/")) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            originalImg = img;
+            const maxW = 720;
+            const scale = Math.min(1, maxW / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            document.getElementById("placeholder").style.display = "none";
+            canvas.style.display = "block";
+            document.getElementById("dl-row").classList.add("visible");
+            resetSliders();
+            render();
+            showStatus("✓ Image loaded", "#2f8cff");
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function render() {
+        if (!originalImg) return;
+        const b = document.getElementById("brightness").value;
+        const c = document.getElementById("contrast").value;
+        const s = document.getElementById("saturation").value;
+        ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(originalImg, 0, 0, canvas.width, canvas.height);
+        ctx.filter = "none";
+        const sharp = parseInt(document.getElementById("sharpness").value);
+        if (sharp > 0) applySharpen(sharp);
+      }
+
+      function applySharpen(amount) {
+        const amt = amount / 100;
+        const w = canvas.width, h = canvas.height;
+        const src = ctx.getImageData(0, 0, w, h);
+        const dst = ctx.createImageData(w, h);
+        const d = src.data, o = dst.data;
+        const k = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            const i = (y * w + x) * 4;
+            if (x === 0 || y === 0 || x === w - 1 || y === h - 1) {
+              for (let c = 0; c < 3; c++) o[i + c] = d[i + c];
+              o[i + 3] = d[i + 3];
+              continue;
+            }
+            for (let c = 0; c < 3; c++) {
+              let sum = 0, ki = 0;
+              for (let ky = -1; ky <= 1; ky++)
+                for (let kx = -1; kx <= 1; kx++) {
+                  const idx = ((y + ky) * w + (x + kx)) * 4 + c;
+                  sum += d[idx] * k[ki++];
+                }
+              const orig = d[i + c];
+              o[i + c] = Math.max(0, Math.min(255, orig + (sum - orig) * amt));
+            }
+            o[i + 3] = d[i + 3];
+          }
+        }
+        ctx.putImageData(dst, 0, 0);
+      }
+
+      function applyPreset(type) {
+        const presets = {
+          enhance: { b: 108, c: 115, s: 118, sh: 35 },
+          bw: { b: 105, c: 115, s: 0, sh: 10 },
+          warm: { b: 118, c: 105, s: 115, sh: 0 },
+          dark: { b: 82, c: 125, s: 95, sh: 15 },
+        };
+        const p = presets[type];
+        document.getElementById("brightness").value = p.b; updateVal("bri-val", p.b + "%");
+        document.getElementById("contrast").value = p.c; updateVal("con-val", p.c + "%");
+        document.getElementById("saturation").value = p.s; updateVal("sat-val", p.s + "%");
+        document.getElementById("sharpness").value = p.sh; updateVal("sharp-val", p.sh);
+        render();
+      }
+
+      function togglePick() {
+        if (!originalImg) { showStatus("⚠ Upload an image first", "#ff5da2"); return; }
+        pickMode = !pickMode;
+        canvas.classList.toggle("pick-mode", pickMode);
+        document.getElementById("pick-btn").classList.toggle("picking", pickMode);
+      }
+
+      canvas.addEventListener("click", (e) => {
+        if (!pickMode) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.round((e.clientX - rect.left) * (canvas.width / rect.width));
+        const y = Math.round((e.clientY - rect.top) * (canvas.height / rect.height));
+        const pixel = ctx.getImageData(x, y, 1, 1).data;
+        sampledColor = [pixel[0], pixel[1], pixel[2]];
+        document.getElementById("sample-swatch").style.background = `rgb(${pixel[0]},${pixel[1]},${pixel[2]})`;
+        document.getElementById("sample-label").textContent = `Sampled rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+        pickMode = false;
+        canvas.classList.remove("pick-mode");
+        document.getElementById("pick-btn").classList.remove("picking");
+      });
+
+      function removeBackground() {
+        if (!originalImg) { showStatus("⚠ Upload an image first", "#ff5da2"); return; }
+        if (!sampledColor) { showStatus("⚠ Pick a background color first", "#ff5da2"); return; }
+        const tol = parseInt(document.getElementById("tolerance").value);
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const d = imgData.data;
+        const [r0, g0, b0] = sampledColor;
+        for (let i = 0; i < d.length; i += 4) {
+          const dist = Math.sqrt((d[i] - r0) ** 2 + (d[i + 1] - g0) ** 2 + (d[i + 2] - b0) ** 2);
+          if (dist < tol) d[i + 3] = 0;
+        }
+        ctx.putImageData(imgData, 0, 0);
+        showStatus("✓ Background removed", "#2f8cff");
+      }
+
+      function resetSliders() {
+        document.getElementById("brightness").value = 100; updateVal("bri-val", "100%");
+        document.getElementById("contrast").value = 100; updateVal("con-val", "100%");
+        document.getElementById("saturation").value = 100; updateVal("sat-val", "100%");
+        document.getElementById("sharpness").value = 0; updateVal("sharp-val", "0");
+        document.getElementById("tolerance").value = 40; updateVal("tol-val", "40");
+        sampledColor = null;
+        document.getElementById("sample-swatch").style.background = "#888";
+        document.getElementById("sample-label").textContent = 'No color sampled yet - click "Pick" then click the background';
+      }
+
+      function resetAll() {
+        if (!originalImg) return;
+        resetSliders();
+        render();
+        showStatus("Image reset", "#8b93a7");
+      }
+
+      function clearAll() {
+        originalImg = null;
+        sampledColor = null;
+        canvas.style.display = "none";
+        document.getElementById("placeholder").style.display = "block";
+        document.getElementById("dl-row").classList.remove("visible");
+        resetSliders();
+        fileInput.value = "";
+        showStatus("Cleared", "#8b93a7");
+      }
+
+      function downloadImage() {
+        if (!originalImg) { showStatus("⚠ Upload an image first", "#ff5da2"); return; }
+        const link = document.createElement("a");
+        link.download = "edited-image.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        showStatus("↓ Image downloaded!", "#2f8cff");
+      }
+    </script>
+  </body>
+</html>
