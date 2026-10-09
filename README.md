@@ -240,11 +240,11 @@ The project does not implement a backend image-upload service.
 - GitHub: [@BenkabaMarwa](https://github.com/BenkabaMarwa)
 - LinkedIn: [marwa-benkaba](https://www.linkedin.com/in/marwa-benkaba-916090329/)
 
-
 ## 📄 License
 
-Add your preferred license before publishing the repository.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
 © 2026 Marwa Benkaba. All rights reserved.
+
